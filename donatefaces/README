@@ -1,0 +1,87 @@
+
+
+    by Joseph Turian
+
+Extract faces from video clips; generate training data for pose-invariant face features.
+
+USAGE:
+    youtube-dl 'http://www.youtube.com/watch?v=2QlGj_GPPi4'
+    ./detect_faces.py 2QlGj_GPPi4.flv > 2QlGj_GPPi4.flv.faces
+    ./draw_faces.py 2QlGj_GPPi4.flv 2QlGj_GPPi4.flv.faces 2QlGj_GPPi4.faces.mp4
+
+    ./smooth_faces.py 2QlGj_GPPi4.flv.faces > 2QlGj_GPPi4.flv.facechains
+    ./draw_facechains.py 2QlGj_GPPi4.flv 2QlGj_GPPi4.flv.facechains 2QlGj_GPPi4.facechains.mp4
+
+    youtube-dl 'http://www.youtube.com/watch?v=Hde4s-xBhqE'
+    ./detect_faces.py Hde4s-xBhqE.flv > Hde4s-xBhqE.flv.faces
+    ./draw_faces.py Hde4s-xBhqE.flv Hde4s-xBhqE.flv.faces Hde4s-xBhqE.faces.mp4
+    ./smooth_faces.py Hde4s-xBhqE.flv.faces > Hde4s-xBhqE.flv.facechains
+    ./draw_facechains.py Hde4s-xBhqE.flv Hde4s-xBhqE.flv.facechains Hde4s-xBhqE.facechains.mp4
+
+If you want to crawl youtube video URLs, check out crawl/
+
+
+REQUIREMENTS:
+    * OpenCV (>=2?) with *old* style (Swig) Python bindings
+        * If you are under Ubuntu, this is easy to install:
+            sudo apt-get install python-opencv libcv-dev
+
+            Note:
+            /usr/share/opencv/haarcascades/haarcascade_frontalface_default.xml
+            is contained in libcv-dev so you actually need to install
+            that too for the code to run
+        * If you are compiling the code from scratch, make sure you use option:
+                -D BUILD_SWIG_PYTHON_SUPPORT=ON
+            when running 'cmake' to get the old style bindings.
+        * Note: The new style Python bindings are incomplete, unfortunately:
+            http://stackoverflow.com/questions/2195441/opencv-2-0-and-python
+            (See comment by ezod)
+    * My Python common library:
+        http://github.com/turian/commono
+    * youtube-dl:
+        http://bitbucket.org/rg3/youtube-dl/
+
+        Always use the latest version of youtube-dl (the HG current version).
+
+    * numpy
+
+TODO:
+    * Compute sha1sum after downloading a video
+
+IMPLICIT REQUIREMENTS (things required by REQUIREMENTS):
+    * ffmpeg
+    * simplejson
+        
+
+CREDITS:
+    * Python OpenCV face detection code originally based upon code from
+    Robert Martin “Marty” McGuire:
+        http://creatingwithcode.com/howto/face-detection-in-static-images-with-python/
+
+---------------------
+
+DEPRECATED
+
+    * pyffmpeg
+        http://code.google.com/p/pyffmpeg/issues/detail?id=9#c5
+
+        sudo pip install -e git://github.com/tranx/pyffmpeg.git#egg=pyffmpeg
+
+    * PyMedia
+        For converting a video into images. I use version 1.3.7.3.
+            <http://securfox.wordpress.com/2009/05/15/pymedia-on-debian-lenny/>
+            Edit the audio/acodec/acodec.c file and on line 31 insert the following :
+
+            #define HAVE_LRINTF
+
+            So you should have:
+
+            #include <libavcodec/avcodec.h>
+            #define HAVE_LRINTF
+            #include “libavcodec/dsputil.h”
+            #include “version.h”
+        TODO: Just use OpenCV cvCaptureFromFile method? PyMedia is old
+        and unsupported.
+
+    * Video to image dumping is from PyMedia example code:
+        http://pymedia.org/tut/src/dump_video.py.html
